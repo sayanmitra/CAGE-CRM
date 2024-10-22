@@ -124,12 +124,12 @@ ui <- fluidPage(
       tags$footer(
         tags$hr(),
         tags$p(
-          paste("© CAGE-CRM", format(Sys.Date(), "%Y")), 
-          style = "font-size: 11px; color: #7F8C8D;"
+          "Medical Disclaimer: This tool is for informational purposes only and does not substitute for professional medical advice.",
+          style = "font-size: 11px; color: #7F8C8D; text-align: left;"
         ),
         tags$p(
-          "Medical Disclaimer: This tool is for informational purposes only and does not substitute for professional medical advice.",
-          style = "font-size: 9px; color: #7F8C8D;"
+          paste("© Sayan Mitra", format(Sys.Date(), "%Y")), 
+          style = "font-size: 9px; color: #DFE5E6; text-align: center; position: fixed; bottom: 0; right: 0; width: 100%; padding-right: 20px;"
         )
       )
     )
