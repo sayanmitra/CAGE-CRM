@@ -101,16 +101,16 @@ ui <- fluidPage(
       div(class = "result-panel",
           tags$h3("Risk Scores from Cardiovascular Risk Models"),
           tags$hr(),
-          div(class = "risk-output", textOutput("frsScore")),
-          div(class = "risk-output", textOutput("qriskScore")),
-          div(class = "risk-output", textOutput("reynoldsScore")),
-          div(class = "risk-output", textOutput("scoreChart")),
-          div(class = "risk-output", textOutput("pceScore")),
-          div(class = "risk-output", textOutput("mesaScore")),
-          div(class = "risk-output", textOutput("whoScore")),
-          div(class = "risk-output", textOutput("chadsScore")),
-          div(class = "risk-output", textOutput("globoriskScore")),
-          div(class = "risk-output", textOutput("assignScore"))
+          div(class = "risk-output", uiOutput("frsScore")),
+          div(class = "risk-output", uiOutput("qriskScore")),
+          div(class = "risk-output", uiOutput("reynoldsScore")),
+          div(class = "risk-output", uiOutput("scoreChart")),
+          div(class = "risk-output", uiOutput("pceScore")),
+          div(class = "risk-output", uiOutput("mesaScore")),
+          div(class = "risk-output", uiOutput("whoScore")),
+          div(class = "risk-output", uiOutput("chadsScore")),
+          div(class = "risk-output", uiOutput("globoriskScore")),
+          div(class = "risk-output", uiOutput("assignScore"))
       ),
       
       div(class = "result-panel",
@@ -138,6 +138,7 @@ ui <- fluidPage(
 
 # Define server logic for predictions
 server <- function(input, output) {
+  
   # Framingham Risk Score (FRS)
   calculate_frs <- function(age, gender, cholesterol, hdl, sysBP, smoker, diabetes) {
     if (gender == "Male") {
@@ -244,55 +245,55 @@ server <- function(input, output) {
     return(score)
   }
   
-  # Render results for each model
-  output$frsScore <- renderText({
+  # Render results for each model with hyperlinks
+  output$frsScore <- renderUI({
     frs <- calculate_frs(input$age, input$gender, input$cholesterol, input$hdl, input$sysBP, input$smoker, input$diabetes)
-    paste("Framingham Risk Score:", round(frs, 2))
+    HTML(paste("Framingham Risk Score:", round(frs, 2), '<a href="https://en.wikipedia.org/wiki/Framingham_Risk_Score" target="_blank">[Info]</a>'))
   })
   
-  output$qriskScore <- renderText({
+  output$qriskScore <- renderUI({
     qrisk <- calculate_qrisk(input$age, input$gender, input$cholesterol, input$sysBP, input$smoker, input$bmi, input$familyCVD, input$diabetes, input$ethnicity, input$deprivation, input$atrialFib)
-    paste("QRISK Score:", round(qrisk, 2))
+    HTML(paste("QRISK Score:", round(qrisk, 2), '<a href="https://en.wikipedia.org/wiki/QRISK" target="_blank">[Info]</a>'))
   })
   
-  output$reynoldsScore <- renderText({
+  output$reynoldsScore <- renderUI({
     reynolds <- calculate_reynolds(input$age, input$sysBP, input$cholesterol, input$hdl, input$hscrp, input$smoker, input$familyCVD)
-    paste("Reynolds Risk Score:", round(reynolds, 2))
+    HTML(paste("Reynolds Risk Score:", round(reynolds, 2), '<a href="https://www.sciencedirect.com/topics/medicine-and-dentistry/reynolds-risk-score" target="_blank">[Info]</a>'))
   })
   
-  output$scoreChart <- renderText({
+  output$scoreChart <- renderUI({
     score <- calculate_score(input$age, input$gender, input$cholesterol, input$sysBP, input$smoker)
-    paste("SCORE Chart:", round(score, 2))
+    HTML(paste("SCORE Chart:", round(score, 2), '<a href="https://www.jacc.org/doi/10.1016/j.jacc.2021.04.052" target="_blank">[Info]</a>'))
   })
   
-  output$pceScore <- renderText({
+  output$pceScore <- renderUI({
     pce <- calculate_pce(input$age, input$gender, input$cholesterol, input$hdl, input$sysBP, input$smoker, input$diabetes, input$ethnicity)
-    paste("Pooled Cohort Equations Score:", round(pce, 2))
+    HTML(paste("Pooled Cohort Equations Score:", round(pce, 2), '<a href="https://clincalc.com/cardiology/ascvd/pooledcohort.aspx#:~:text=The%20purpose%20of%20the%20Pooled,these%20events%20in%20the%20past." target="_blank">[Info]</a>'))
   })
   
-  output$mesaScore <- renderText({
+  output$mesaScore <- renderUI({
     mesa <- calculate_mesa(input$age, input$cholesterol, input$sysBP, input$smoker, input$familyCVD, input$diabetes, input$cac)
-    paste("MESA Risk Score:", round(mesa, 2))
+    HTML(paste("MESA Risk Score:", round(mesa, 2), '<a href="https://doi.org/10.1161/JAHA.120.019351" target="_blank">[Info]</a>'))
   })
   
-  output$whoScore <- renderText({
+  output$whoScore <- renderUI({
     whoRisk <- calculate_who(input$age, input$gender, input$sysBP, input$smoker, input$diabetes)
-    paste("WHO CVD Risk Score:", round(whoRisk, 2))
+    HTML(paste("WHO CVD Risk Score:", round(whoRisk, 2), '<a href="https://www.who.int/news/item/02-09-2019-who-updates-cardiovascular-risk-charts" target="_blank">[Info]</a>'))
   })
   
-  output$chadsScore <- renderText({
+  output$chadsScore <- renderUI({
     chads <- calculate_chads(input$age, input$sysBP, input$diabetes, input$smoker, input$atrialFib)
-    paste("CHADS2 / CHA2DS2-VASc Score:", round(chads, 2))
+    HTML(paste("CHADS2 / CHA2DS2-VASc Score:", round(chads, 2), '<a href="https://en.wikipedia.org/wiki/CHA2DS2%E2%80%93VASc_score" target="_blank">[Info]</a>'))
   })
   
-  output$globoriskScore <- renderText({
+  output$globoriskScore <- renderUI({
     globorisk <- calculate_globorisk(input$age, input$gender, input$cholesterol, input$sysBP, input$smoker, input$diabetes)
-    paste("Globorisk Score:", round(globorisk, 2))
+    HTML(paste("Globorisk Score:", round(globorisk, 2), '<a href="https://www.globorisk.org/" target="_blank">[Info]</a>'))
   })
   
-  output$assignScore <- renderText({
+  output$assignScore <- renderUI({
     assign <- calculate_assign(input$age, input$gender, input$cholesterol, input$sysBP, input$smoker, input$deprivation, input$familyCVD)
-    paste("ASSIGN Score:", round(assign, 2))
+    HTML(paste("ASSIGN Score:", round(assign, 2), '<a href="https://www.assign-score.com/" target="_blank">[Info]</a>'))
   })
   
   # Composite Risk Score
